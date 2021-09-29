@@ -1,0 +1,173 @@
+<html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/css/starter.css">
+  <title>PacMan</title>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+  </script>
+</head>
+
+<body>
+  <!-- Navbar-->
+  <nav class="navbar navbar-dark bg-primary" aria-label="Tenth navbar example">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample08"
+        aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/Matt0523">GitHub</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown08" data-bs-toggle="dropdown"
+              aria-expanded="false">Portfolio</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown08">
+              <li><a class="dropdown-item" href="eyes.html">Eyes</a></li>
+              <li><a class="dropdown-item" href="PacMan.html">PackMan</a></li>
+              <li><a class="dropdown-item" href="bus-tracker.html">Bus Tracker</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <P class="text-center">PackMan allows the user to creat as many PackMen as they want using the Add PackMan button
+      then watch them bounce around the screen at random speeds using the Start Button. For more information and the
+      code used visit my GitHub repository <a
+        href="https://github.com/Matt0523/PacMan">https://github.com/Matt0523/PacMan</a>.</P>
+  </div>
+
+  <script>
+    var pos = 0;
+    const pacArray = [
+      ["PacMan1.png", "PacMan2.png"],
+      ["PacMan3.png", "PacMan4.png"],
+    ];
+    var direction = 0;
+    const pacMen = []; // This array holds all the pacmen
+
+    function setToRandom(scale) {
+      return {
+        x: Math.random() * scale,
+        y: Math.random() * scale,
+      };
+    }
+    // Factory to make a PacMan at a random position with random velocity
+    function makePac() {
+      // returns an object with random values scaled {x: 33, y: 21}
+      let velocity = setToRandom(10); // {x:?, y:?}
+      let position = setToRandom(200);
+      // Add image to div id = game
+      let game = document.getElementById("game");
+      let newimg = document.createElement("img");
+      newimg.style.position = "absolute";
+      newimg.src = "./images/PacMan1.png";
+      newimg.width = 100;
+      //
+      // set position here
+      newimg.style.left = position.x;
+      newimg.style.top = position.y;
+      //
+
+      // add new Child image to game
+      game.appendChild(newimg);
+      // return details in an object
+      return {
+        position,
+        velocity,
+        newimg,
+      };
+    }
+
+    function update() {
+      //loop over pacmen array and move each one and move image in DOM
+      pacMen.forEach((item) => {
+        checkCollisions(item);
+        item.position.x += item.velocity.x;
+        item.position.y += item.velocity.y;
+
+        item.newimg.style.left = item.position.x;
+        item.newimg.style.top = item.position.y;
+      });
+      setTimeout(update, 20);
+    }
+
+    //
+    // detect collision with all walls and make pacman bounce
+    //
+    function checkCollisions(item) {
+      if (
+        item.position.x + item.velocity.x + item.newimg.width >
+        window.innerWidth ||
+        item.position.x + item.velocity.x < 0
+      )
+        item.velocity.x = -item.velocity.x;
+      if (
+        item.position.y + item.velocity.y + item.newimg.height >
+        window.innerHeight ||
+        item.position.y + item.velocity.y < 0
+      )
+        item.velocity.y = -item.velocity.y;
+    }
+
+    function makeOne() {
+      pacMen.push(makePac()); // add a new PacMan
+    }
+
+  </script>
+
+  <body>
+    <div class="content">
+      <div class="one">
+        <div class="text-center">
+          <div id="game">
+            <!--<button onclick="makeOne()" width="200" height="30">Add PacMan</button>-->
+            <button type="button" class="btn btn-secondary" onclick="makeOne()">Add PacMan</button>
+          </div>
+        </div>
+      </div>
+      <div class="two">
+        <div class="text-center">
+          <div id="game">
+            <!--<button onclick="update()" width="200" height="30">Start Game</button>-->
+            <button type="button" class="btn btn-secondary" onclick="update()">Start Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+
+  <style>
+    .content {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      margin-top: 10;
+    }
+
+    .one {
+      grid-column: 3;
+    }
+
+    .two {
+      grid-column: 4;
+    }
+
+  </style>
+
+</html>
